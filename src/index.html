@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>App</title>
+    <style>
+        md-content, body{
+            background-color: rgb(190,222,173);
+        }
+        .md-toolbar-tools {
+            background-color: rgb(0, 0, 0);
+        }
+
+        h1 {
+            font-family: 'Josefin Slab';
+            font-size: 80px;
+        }
+        .circular {
+            border-radius: 50%;
+            overflow: hidden;
+            width: 25%;
+            height: 25%;
+        }
+        .center {
+            text-align: center;
+        }
+
+        .takki {
+            color: red;
+        }
+        .md-toolbar-tools span {
+            font-family: 'Lato';
+            font-style: italic;
+        }
+        .pad {
+            padding-left: 30px;
+        }
+
+        #pic { height: 200px; width: 200px; overflow: hidden; margin: 30px;}
+    </style>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Josefin+Slab" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato" />
+
+</head>
+
+<body>
+    <div layout="column" layout-fill>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <a href="http://localhost:8080/#/home">Party in the USA</a>
+                <!-- fill up the space between left and right area -->
+                <a href="http://localhost:8080/#/photos" class="pad">Phooootos</a>
+                <span flex></span>
+                <md-button>
+                    Right Bar Button
+                </md-button>
+            </div>
+        </md-toolbar>
+        <div ui-view>
+            <!-- Views get injected here -->
+        </div>
+    </div>
+</body>
+
+</html>

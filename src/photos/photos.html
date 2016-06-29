@@ -1,0 +1,28 @@
+<md-content class="center">
+    <h1>Competition of Cuteness</h1>
+
+    <!--<md-button ng-click="vm.next()" class="md-raised takki">Next photo</md-button>-->
+    <div layout="row" layout-align="center start" layout-wrap>
+        <div id="pic">
+            <img src={{vm.photo1}} alt="">
+        </div>
+        <div id="pic">
+            <img src={{vm.photo2}} alt="">
+        </div>
+    </div>
+    <div>
+        <md-button ng-click="vm.left()" class="md-raised">Left</md-button>
+        <md-button ng-click="vm.right()" class="md-raised">Right</md-button>
+    </div>
+    
+    <table>
+        <tr ng-repeat="(key, value) in vm.score | orderBy: 'value'">
+            <td>
+                <img ng-src="http://thecatapi.com/api/images/get?image_id={{key}}" class="md-avatar" alt="{{item.who}}" />
+            <td>
+            <td>Cat: {{key}}</td>
+            <td>Score: {{value}}</td>
+        </tr>
+    </table>
+</md-content>
+
