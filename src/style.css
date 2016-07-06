@@ -1,0 +1,85 @@
+
+md-content, body{
+    background-color: rgb(190,222,173);
+    cursor: url(http://orig01.deviantart.net/c2de/f/2013/190/f/b/free_to_use_animated_russia_cat_cursor_by_lemonade_kitten-d6cspro.gif), default;
+}
+.md-toolbar-tools {
+    background-color: rgb(0, 0, 0);
+}
+
+h1 {
+    font-family: 'Josefin Slab';
+    font-size: 60px;
+}
+.circular {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 25%;
+    height: 25%;
+}
+.center {
+    text-align: center;
+}
+
+.takki {
+    color: red;
+}
+.md-toolbar-tools span {
+    font-family: 'Lato';
+    font-style: italic;
+}
+.pad {
+    padding-left: 30px;
+}
+
+
+.catPicture {
+    position: relative;
+    float: left;
+    width:  250px;
+    height: 250px;
+    background-position: 50% 50%;
+    background-repeat:   no-repeat;
+    background-size:     cover;
+    border-radius: 8px;
+    border: 20px solid white;
+    border-bottom: 40px solid white;
+    margin-bottom: 20px;
+    box-shadow: 10px 10px 20px #666666;
+}
+
+.catName {
+    font-size: 40px;
+}
+
+ figcaption{
+    font-family: 'Josefin Slab';
+ }
+
+img:focus{
+    outline: none;
+}
+
+ figcaption:focus {
+    outline: none;
+    border: 0;
+ }
+
+ .catAvatar{
+     border-radius: 50%;
+     width: 60px;
+     height: 60px;
+ }
+
+ .scoreboard{
+     margin-top: 15px;
+ }
+
+table {
+  border-collapse: separate;
+  border-spacing: 10px 0;
+}
+
+.catScore{
+    padding: 0 40px;
+}

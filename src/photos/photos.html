@@ -2,27 +2,28 @@
     <h1>Competition of Cuteness</h1>
 
     <!--<md-button ng-click="vm.next()" class="md-raised takki">Next photo</md-button>-->
-    <div layout="row" layout-align="center start" layout-wrap>
-        <div id="pic">
-            <img src={{vm.photo1}} alt="">
-        </div>
-        <div id="pic">
-            <img src={{vm.photo2}} alt="">
-        </div>
+    <div layout="row" layout-align="center center" layout-wrap>
+        <figure>
+            <img class="catPicture" src={{vm.photo2.src}} ng-click="vm.voteLeft()" alt="">
+            <figcaption class="catName" ng-click="vm.showAlert($event, 2)">{{vm.photo2.name}}</figcaption>
+        </figure>
+        <div flex="5"></div>
+        <figure>
+            <img class="catPicture" src={{vm.photo1.src}} ng-click="vm.voteRight()" alt="">
+            <figcaption class="catName" ng-click="vm.showAlert($event, 1)">{{vm.photo1.name}}</figcaption>
+        </figure>
     </div>
-    <div>
-        <md-button ng-click="vm.left()" class="md-raised">Left</md-button>
-        <md-button ng-click="vm.right()" class="md-raised">Right</md-button>
-    </div>
-    
-    <table>
-        <tr ng-repeat="(key, value) in vm.score | orderBy: 'value'">
-            <td>
-                <img ng-src="http://thecatapi.com/api/images/get?image_id={{key}}" class="md-avatar" alt="{{item.who}}" />
-            <td>
-            <td>Cat: {{key}}</td>
-            <td>Score: {{value}}</td>
-        </tr>
-    </table>
-</md-content>
 
+    <div class="scoreboard" layout="column" layout-align="center center" layout-wrap>
+        <table>
+        <thead>
+            <h2>Top picks</h2>
+        </thead>
+            <tr ng-repeat="cat in vm.catList | orderBy:'score':reverse=true | limitTo:3">
+                <td ng-if="cat.score != 0"><img class="catAvatar" ng-src={{cat.src}}></td>
+                <td ng-if="cat.score != 0">{{cat.name}}</td>
+                <td class="catScore" ng-if="cat.score != 0">{{cat.score}}</td>
+            </tr>
+        </table>
+    </div>
+</md-content>

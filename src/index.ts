@@ -8,6 +8,7 @@ import 'angular-aria';
 import 'angular-animate';
 
 import 'angular-material/angular-material.css';
+import './style.css'
 
 import { routing } from './index.config';
 

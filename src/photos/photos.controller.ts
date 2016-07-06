@@ -1,106 +1,81 @@
 'use strict';
 
 import { IScope } from 'angular';
+import { Cat } from '../models/cat.model';
 
 const deps: string[] = [
     '$scope',
-    '$http'
+    '$http',
+    '$mdDialog'
 ];
 
 export class PhotosCtrl {
-    photo1: any = null;
-    photo2: any = null;
-    score: { [key:string]:number; } = {};
-    scoreArr: any[] = null;
-    id_photo1: any = null;
-    id_photo2: any = null;
-    name1: string = null;
-    testObj: { photo:string, score:number, name:string };
-    scoreBoard: Object[];
-    
+    catList: Cat[] = [];
+    photo1: Cat;
+    photo2: Cat;
+    max: number = 30;
+    min: number = 0;
 
     constructor(
-        private $scope: IScope, private $http: ng.IHttpService
+        private $scope: IScope, private $http: ng.IHttpService, private $mdDialog: ng.material.IDialogService
     ) {
-        //Putting pic in photo1
-         this.$http.get('http://thecatapi.com/api/images/get?format=xml&size=small')
-            .then((response) => {
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(String(response.data),"text/xml");
-                this.photo1 = xmlDoc.getElementsByTagName("url")[0].childNodes[0].nodeValue;
-                this.id_photo1 = xmlDoc.getElementsByTagName("id")[0].childNodes[0].nodeValue;
-            });
-        //Putting pic in photo2 and declaring the first id
-        this.$http.get('http://thecatapi.com/api/images/get?format=xml&size=small')
-            .then((response) => {
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(String(response.data),"text/xml");
-                this.photo2 = xmlDoc.getElementsByTagName("url")[0].childNodes[0].nodeValue;
-                this.id_photo2 = xmlDoc.getElementsByTagName("id")[0].childNodes[0].nodeValue;
-            });
 
-
-    }
-
-    
-
-    left(){
-        this.$http.get('http://thecatapi.com/api/images/get?format=xml&size=small')
-            .then((response) => {
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(String(response.data),"text/xml");
-                this.photo2 = xmlDoc.getElementsByTagName("url")[0].childNodes[0].nodeValue;
-                this.id_photo2 = xmlDoc.getElementsByTagName("id")[0].childNodes[0].nodeValue;
-
-                if(this.score[this.id_photo1] == null){
-                    this.score[this.id_photo1] = 0;
-                }
-                this.score[this.id_photo1] = this.score[this.id_photo1] + 1; 
+        this.$http.get('http://thecatapi.com/api/images/get?format=xml&size=small&results_per_page=' + this.max)
+            .then((response: any) => {
+                this.$http.get('https://randomuser.me/api/?results=' + this.max + 1 + '&nat=gb')
+                    .then((nameResponse: any) => {
+                        let regexp = new RegExp('<url>(.*?)<\/url>', "g");
+                        let matches;
+                        let name = nameResponse.data.results[0].name.first;
+                        let index = 0;
+                        while (matches = regexp.exec(response.data)) {
+                            this.catList.push(new Cat(nameResponse.data.results[index].name.first, matches[1], 0, index));
+                            index++;
+                        }
+                        console.log(index)
+                        this.photo1 = this.catList[0];
+                        this.photo2 = this.catList[1];
+                    });
             });
     }
 
-    right(){
-        this.$http.get('http://thecatapi.com/api/images/get?format=xml&size=small')
-            .then((response) => {
-	            var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(String(response.data),"text/xml");
-                this.photo1 = xmlDoc.getElementsByTagName("url")[0].childNodes[0].nodeValue;
-                this.id_photo1 = xmlDoc.getElementsByTagName("id")[0].childNodes[0].nodeValue;
-                if(this.score[this.id_photo2] == null){
-                    this.score[this.id_photo2] = 0;
-                }
-                this.score[this.id_photo2] = this.score[this.id_photo2] + 1; 
-            });
-    }
-
-    //convert the map to an array of objects so i can use orderBy
-    createArr(){
-        this.scoreArr = null;
-        for(var key in this.score){
-            this.scoreArr.push()
+    public voteLeft() {
+        this.photo2.increaseScore();
+        let newIndex: number = Math.floor(Math.random() * this.max);
+        while (newIndex == this.photo2.index || newIndex == this.photo1.index) {
+            newIndex = Math.floor(Math.random() * this.max);
         }
+        this.photo1 = this.catList[newIndex];
     }
 
-    sortMe(){
-        return function sara(params:any) {
-            return params.value.order;
+    public voteRight() {
+        this.photo1.increaseScore();
+        let newIndex: number = Math.floor(Math.random() * this.max);
+        while (newIndex == this.photo1.index || newIndex == this.photo2.index) {
+            newIndex = Math.floor(Math.random() * this.max);
         }
+        this.photo2 = this.catList[newIndex];
     }
 
-
-    next(){
-        this.$http.get('http://thecatapi.com/api/images/get?format=xml&size=small')
-            .then((response) => {
-                this.parse(response.data);
-            });
-    }
-    
-    parse(inp: Object){
-        var parser = new DOMParser();
-        var xmlDoc = parser.parseFromString(String(inp),"text/xml");
-        this.photo1 = xmlDoc.getElementsByTagName("url")[0].childNodes[0].nodeValue;
-    }
-    
+    showAlert = function (ev, pic) {
+        var currentPhoto;
+        if(pic == 1){
+            currentPhoto = this.photo1;
+        }
+        else{
+            currentPhoto = this.photo2;
+        }
+        this.$mdDialog.show(
+            this.$mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title(currentPhoto.name)
+                .textContent(currentPhoto.description)
+                .ariaLabel('Cat bio')
+                .ok('Meow!')
+                .targetEvent(ev)
+        );
+    };
 }
 
 PhotosCtrl.$inject = deps;
